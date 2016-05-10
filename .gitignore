@@ -15,4 +15,6 @@
 /version/smac-version.txt
 /zip
 /.apt_generated
-.texlipse
+.texlipse.idea
+target/
+.idea/
