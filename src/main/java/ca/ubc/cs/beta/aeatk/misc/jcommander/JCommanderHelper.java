@@ -5,7 +5,6 @@ import ca.ubc.cs.beta.aeatk.logging.CommonMarkers;
 import ca.ubc.cs.beta.aeatk.misc.options.OptionLevel;
 import ca.ubc.cs.beta.aeatk.misc.options.UsageSection;
 import ca.ubc.cs.beta.aeatk.misc.returnvalues.AEATKReturnValues;
-import ca.ubc.cs.beta.aeatk.misc.spi.SPIClassLoaderHelper;
 import ca.ubc.cs.beta.aeatk.options.AbstractOptions;
 import ca.ubc.cs.beta.aeatk.options.docgen.OptionsToUsage;
 import ca.ubc.cs.beta.aeatk.options.docgen.UsageSectionGenerator;
@@ -20,23 +19,23 @@ import java.util.Map.Entry;
 public final class JCommanderHelper
 {
 
-//	public static JCommander getJCommander(AbstractOptions opts, Map<String, AbstractOptions> taeOpts)
-//	{
-//
-//		ArrayList<Object> allOptions = new ArrayList<Object>();
-//
-//		allOptions.add(opts);
-//		for(Entry<String, AbstractOptions> ent : taeOpts.entrySet())
-//		{
-//			if(ent.getValue() != null)
-//			{
-//				allOptions.add(ent.getValue());
-//			}
-//		}
-//		JCommander com = new JCommander(allOptions.toArray(), true, true);
-//		return com;
-//
-//	}
+	public static JCommander getJCommander(AbstractOptions opts, Map<String, AbstractOptions> taeOpts)
+	{
+
+		ArrayList<String> allOptions = new ArrayList<>();
+
+		allOptions.add(opts.toString());
+		for(Entry<String, AbstractOptions> ent : taeOpts.entrySet())
+		{
+			if(ent.getValue() != null)
+			{
+				allOptions.add(ent.getValue().toString());
+			}
+		}
+		JCommander com = new JCommander(allOptions);//, true, true);
+		return com;
+
+	}
 
 //
 //	public static JCommander parseCheckingForHelpAndVersion(String[] args,AbstractOptions options )
@@ -143,53 +142,52 @@ public final class JCommanderHelper
 		
 	}
 
-//	/**
-//	 * Returns a JCommander object after screening for parameters that are asking for help or version information
-//	 *
-//	 *
-//	 * @param args
-//	 * @param mainOptions
-//	 * @param taeOptions
-//	 *
-//	 * @return
-//	 */
-//	public static JCommander getJCommanderAndCheckForHelp(String[] args,AbstractOptions mainOptions) {
-//		return getJCommanderAndCheckForHelp(args, mainOptions, Collections.<String, AbstractOptions> emptyMap());
-//	}
+	/**
+	 * Returns a JCommander object after screening for parameters that are asking for help or version information
+	 *
+	 *
+	 * @param args
+	 * @param mainOptions
+	 *
+	 * @return
+	 */
+	public static JCommander getJCommanderAndCheckForHelp(String[] args,AbstractOptions mainOptions) {
+		return getJCommanderAndCheckForHelp(args, mainOptions, Collections.<String, AbstractOptions> emptyMap());
+	}
 	
 	
-//	/**
-//	 * Returns a JCommander object after screening for parameters that are asking for help or version information
-//	 *
-//	 *
-//	 * @param args
-//	 * @param mainOptions
-//	 * @param taeOptions
-//	 *
-//	 * @return
-//	 */
-//	public static JCommander getJCommanderAndCheckForHelp(String[] args,AbstractOptions mainOptions,Map<String, AbstractOptions> taeOptions) {
-//		JCommander jcom = getJCommander(mainOptions, taeOptions);
-//		if(args.length == 0)
-//		{
-//			List<UsageSection> secs = UsageSectionGenerator.getUsageSections(mainOptions, taeOptions);
-//			boolean quit= false;
-//			for(UsageSection sec  : secs)
-//			{
-//				quit |= sec.getHandler().handleNoArguments();
-//
-//			}
-//
-//			if(quit)
-//			{
-//				System.exit(AEATKReturnValues.PARAMETER_EXCEPTION);
-//			}
-//		}
-//		checkForHelpAndVersion(args, mainOptions, taeOptions);
-//		return jcom;
-//
-//
-//	}
+	/**
+	 * Returns a JCommander object after screening for parameters that are asking for help or version information
+	 *
+	 *
+	 * @param args
+	 * @param mainOptions
+	 * @param taeOptions
+	 *
+	 * @return
+	 */
+	public static JCommander getJCommanderAndCheckForHelp(String[] args,AbstractOptions mainOptions,Map<String, AbstractOptions> taeOptions) {
+		JCommander jcom = getJCommander(mainOptions, taeOptions);
+		if(args.length == 0)
+		{
+			List<UsageSection> secs = UsageSectionGenerator.getUsageSections(mainOptions, taeOptions);
+			boolean quit= false;
+			for(UsageSection sec  : secs)
+			{
+				quit |= sec.getHandler().handleNoArguments();
+
+			}
+
+			if(quit)
+			{
+				System.exit(AEATKReturnValues.PARAMETER_EXCEPTION);
+			}
+		}
+		checkForHelpAndVersion(args, mainOptions, taeOptions);
+		return jcom;
+
+
+	}
 	
 	public static void logCallString(String[] args, Class<?> c) {
 		Logger log = LoggerFactory.getLogger(JCommanderHelper.class);
